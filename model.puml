@@ -1,0 +1,49 @@
+@startuml
+
+package "com.library" {
+  class Main
+  class BookController
+}
+
+package "com.library.model" {
+  enum BookStatus {
+    ACTIVE
+    INACTIVE
+    COMPLETED
+    IN_PROGRESS
+    OVERDUE
+  }
+  class Book
+}
+
+package "com.library.dao" {
+  interface BookDAO
+  class PostgresBookDAO
+  class CSVBookDAO
+  class GoogleSheetsBookDAO
+}
+
+package "com.library.service" {
+  class BookService
+}
+
+package "com.library.util" {
+  class DatabaseConnection
+  class TestData
+}
+
+' Связи между компонентами
+Main --> BookController
+BookController --> BookService
+BookService --> BookDAO
+BookService --> Book
+
+BookDAO <|.. PostgresBookDAO
+BookDAO <|.. CSVBookDAO
+BookDAO <|.. GoogleSheetsBookDAO
+
+PostgresBookDAO --> DatabaseConnection
+Book --> BookStatus
+BookService --> TestData
+
+@enduml

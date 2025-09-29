@@ -1,0 +1,117 @@
+@startuml
+!theme plain
+skinparam BackgroundColor #F8F9FA
+skinparam Shadowing false
+skinparam RoundCorner 10
+skinparam ClassBorderColor #2C3E50
+skinparam ClassBackgroundColor #FFFFFF
+skinparam ClassFontColor #2C3E50
+skinparam ClassFontStyle bold
+skinparam ArrowColor #34495E
+skinparam ArrowFontSize 11
+
+title "Package Diagram - Book Library Management System"
+
+package "com.library" {
+  [Main] <<JavaFX Application>>
+  note right of [Main]
+    <b>Application Entry Point</b>
+    Initializes JavaFX application
+    and dependency injection
+  end note
+}
+
+package "com.library.controller" {
+  [BookController] <<JavaFX Controller>>
+  note right of [BookController]
+    <b>UI Controller</b>
+    Handles user interactions
+    and manages JavaFX components
+  end note
+}
+
+package "com.library.model" {
+  [Book] <<Entity>>
+  [BookStatus] <<Enum>>
+  note right of [Book]
+    <b>Domain Models</b>
+    Core business entities
+    and data structures
+  end note
+}
+
+package "com.library.service" {
+  [BookService] <<Service>>
+  note right of [BookService]
+    <b>Business Logic Layer</b>
+    Contains application
+    business rules and operations
+  end note
+}
+
+package "com.library.dao" {
+  interface "BookDAO" <<Interface>>
+  note right of "BookDAO"
+    <b>Data Access Contract</b>
+    Defines operations for
+    data persistence
+  end note
+
+  package "com.library.dao.impl" {
+    [PostgresBookDAO] <<DAO Implementation>>
+    [CSVBookDAO] <<DAO Implementation>>
+    [GoogleSheetsBookDAO] <<DAO Implementation>>
+    note right of [PostgresBookDAO]
+      <b>DAO Implementations</b>
+      Concrete implementations
+      for different data sources
+    end note
+  }
+}
+
+package "com.library.util" {
+  [DatabaseConnection] <<Utility>>
+  [TestData] <<Utility>>
+  note right of [DatabaseConnection]
+    <b>Utility Classes</b>
+    Helper classes for
+    database and testing
+  end note
+}
+
+' Dependencies between packages
+[Main] --> [BookController]
+[Main] --> [BookService]
+[Main] --> [com.library.dao.impl]
+
+[BookController] --> [BookService]
+[BookController] --> [com.library.model]
+
+[BookService] --> [com.library.dao]
+[BookService] --> [com.library.model]
+
+[com.library.dao] <|-- [com.library.dao.impl]
+
+[PostgresBookDAO] --> [com.library.util]
+[PostgresBookDAO] --> [com.library.model]
+
+[CSVBookDAO] --> [com.library.model]
+[GoogleSheetsBookDAO] --> [com.library.model]
+
+note bottom of [GoogleSheetsBookDAO]
+  <b>Implementation Note:</b>
+  Currently operating in
+  emulation mode
+end note
+
+legend bottom
+  | Package | Responsibility |
+  | com.library | Application entry point and main class |
+  | com.library.controller | User interface controllers |
+  | com.library.model | Business entities and domain objects |
+  | com.library.service | Business logic and operations |
+  | com.library.dao | Data access abstraction layer |
+  | com.library.util | Utility and helper classes |
+end legend
+
+@enduml

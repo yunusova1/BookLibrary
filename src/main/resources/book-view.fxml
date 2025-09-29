@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.library.controller.BookController" spacing="15"
+      style="-fx-padding: 15; -fx-background-color: #f8f9fa;">
+
+    <!-- Панель поиска -->
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 8; -fx-background-radius: 8;">
+        <Label text="Поиск:" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        <TextField fx:id="searchField" promptText="Введите ключевое слово" HBox.hgrow="ALWAYS"
+                   style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+        <Button text="Найти" onAction="#handleSearch"
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-height: 35; -fx-pref-width: 80; -fx-background-radius: 5;"/>
+    </HBox>
+
+    <!-- Панель действий -->
+    <HBox spacing="10" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 8; -fx-background-radius: 8;">
+        <Button text="📅 Сортировка по сроку" onAction="#handleSortByDueDate"
+                style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-height: 35; -fx-background-radius: 5;"/>
+        <Button text="💡 Рекомендации" onAction="#handleGetRecommendations"
+                style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-height: 35; -fx-background-radius: 5;"/>
+        <Button text="🗑️ Удалить книгу" onAction="#handleDeleteBook"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-height: 35; -fx-background-radius: 5;"/>
+    </HBox>
+
+    <!-- Таблица книг -->
+    <TableView fx:id="booksTable" VBox.vgrow="ALWAYS"
+               style="-fx-background-color: white; -fx-border-radius: 8; -fx-background-radius: 8;">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="titleColumn" text="Название" prefWidth="200"/>
+            <TableColumn fx:id="authorColumn" text="Автор" prefWidth="150"/>
+            <TableColumn fx:id="genreColumn" text="Жанр" prefWidth="120"/>
+            <TableColumn fx:id="statusColumn" text="Статус" prefWidth="100"/>
+            <TableColumn fx:id="pagesColumn" text="Страницы" prefWidth="80"/>
+        </columns>
+    </TableView>
+
+    <!-- Форма добавления/редактирования -->
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 8; -fx-background-radius: 8;">
+        <Label text="Добавить/Редактировать книгу:" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-font-size: 14;"/>
+
+        <GridPane hgap="15" vgap="12">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="100"/>
+                <ColumnConstraints prefWidth="180"/>
+                <ColumnConstraints prefWidth="100"/>
+                <ColumnConstraints prefWidth="180"/>
+            </columnConstraints>
+
+            <!-- Первая строка -->
+            <Label text="Название:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="titleField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                       style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+            <Label text="Автор:" GridPane.rowIndex="0" GridPane.columnIndex="2" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="authorField" GridPane.rowIndex="0" GridPane.columnIndex="3"
+                       style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+
+            <!-- Вторая строка -->
+            <Label text="ISBN:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="isbnField" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                       style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+            <Label text="Жанр:" GridPane.rowIndex="1" GridPane.columnIndex="2" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="genreField" GridPane.rowIndex="1" GridPane.columnIndex="3"
+                       style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+
+            <!-- Третья строка -->
+            <Label text="Статус:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="statusComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                      style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+            <Label text="Срок чтения:" GridPane.rowIndex="2" GridPane.columnIndex="2" style="-fx-font-weight: bold;"/>
+            <DatePicker fx:id="dueDatePicker" GridPane.rowIndex="2" GridPane.columnIndex="3"
+                        style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+
+            <!-- Четвертая строка -->
+            <Label text="Приоритет:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+            <Spinner fx:id="prioritySpinner" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                     style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+            <Label text="Всего страниц:" GridPane.rowIndex="3" GridPane.columnIndex="2" style="-fx-font-weight: bold;"/>
+            <Spinner fx:id="totalPagesSpinner" GridPane.rowIndex="3" GridPane.columnIndex="3"
+                     style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+
+            <!-- Пятая строка -->
+            <Label text="Прочитано:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+            <Spinner fx:id="pagesReadSpinner" GridPane.rowIndex="4" GridPane.columnIndex="1"
+                     style="-fx-pref-height: 35; -fx-background-radius: 5;"/>
+        </GridPane>
+
+        <!-- Кнопки управления формой -->
+        <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+            <Button text="Очистить" onAction="#clearFields"
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-height: 35; -fx-pref-width: 100; -fx-background-radius: 5;"/>
+            <Button text="➕ Добавить книгу" onAction="#handleAddBook"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-height: 35; -fx-pref-width: 130; -fx-background-radius: 5;"/>
+        </HBox>
+    </VBox>
+</VBox>
